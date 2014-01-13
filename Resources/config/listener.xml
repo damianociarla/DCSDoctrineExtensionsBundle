@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="dcs_doctrine_extensions.listener.blameable.class">DCS\DoctrineExtensionsBundle\Listener\BlameableEventListener</parameter>
+        <parameter key="dcs_doctrine_extensions.listener.ip_traceable.class">DCS\DoctrineExtensionsBundle\Listener\IpTraceableEventListener</parameter>
+        <parameter key="dcs_doctrine_extensions.listener.loggable.class">DCS\DoctrineExtensionsBundle\Listener\LoggableEventListener</parameter>
+        <parameter key="dcs_doctrine_extensions.listener.translatable.class">DCS\DoctrineExtensionsBundle\Listener\TranslatableEventListener</parameter>
+    </parameters>
+
+    <services>
+        <service id="gedmo.listener.blameable" class="Gedmo\Blameable\BlameableListener" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+        <service id="gedmo.listener.ip_traceable" class="Gedmo\IpTraceable\IpTraceableListener" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+        <service id="gedmo.listener.loggable" class="Gedmo\Loggable\LoggableListener" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+        <service id="gedmo.listener.sluggable" class="Gedmo\Sluggable\SluggableListener" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+        <service id="gedmo.listener.soft_deleteable" class="Gedmo\SoftDeleteable\SoftDeleteableListener" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+        <service id="gedmo.listener.sortable" class="Gedmo\Sortable\SortableListener" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+        <service id="gedmo.listener.timestampable" class="Gedmo\Timestampable\TimestampableListener" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+        <service id="gedmo.listener.translatable" class="Gedmo\Translatable\TranslatableListener" public="false">
+            <tag name="doctrine.event_subscriber" priority="-10" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+            <call method="setDefaultLocale">
+                <argument>%locale%</argument>
+            </call>
+            <call method="setTranslatableLocale">
+                <argument>%locale%</argument>
+            </call>
+            <call method="setTranslationFallback">
+                <argument>%dcs_doctrine_extensions.translatable.translation_fallback%</argument>
+            </call>
+            <call method="setPersistDefaultLocaleTranslation">
+                <argument>%dcs_doctrine_extensions.translatable.persist_default_locale_translation%</argument>
+            </call>
+            <call method="setSkipOnLoad">
+                <argument>%dcs_doctrine_extensions.translatable.skip_on_load%</argument>
+            </call>
+        </service>
+        <service id="gedmo.listener.tree" class="Gedmo\Tree\TreeListener" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+        <service id="gedmo.listener.uploadable" class="Gedmo\Uploadable\UploadableListener" public="true">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+            <call method="setDefaultPath">
+                <argument>%dcs_doctrine_extensions.uploadable.default_path%</argument>
+            </call>
+        </service>
+
+        <!-- Listener che configurano alcuni servizi di Gedmo\Doctrine\Extensions -->
+        <service id="dcs_doctrine_extensions.listener.blameable" class="%dcs_doctrine_extensions.listener.blameable.class%">
+            <argument type="service" id="gedmo.listener.blameable" />
+            <argument type="service" id="security.context" on-invalid="null" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+        <service id="dcs_doctrine_extensions.listener.ip_traceable" class="%dcs_doctrine_extensions.listener.ip_traceable.class%" scope="request">
+            <argument type="service" id="gedmo.listener.ip_traceable" />
+            <argument type="service" id="request" on-invalid="null" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+        <service id="dcs_doctrine_extensions.listener.loggable" class="%dcs_doctrine_extensions.listener.loggable.class%">
+            <argument type="service" id="gedmo.listener.loggable" />
+            <argument type="service" id="security.context" on-invalid="null" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+        <service id="dcs_doctrine_extensions.listener.translatable" class="%dcs_doctrine_extensions.listener.translatable.class%">
+            <argument type="service" id="gedmo.listener.translatable" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+    </services>
+</container>
