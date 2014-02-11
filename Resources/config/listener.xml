@@ -5,6 +5,8 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <parameter key="dcs_doctrine_extensions.filter.online_filterable.class">DCS\DoctrineExtensionsBundle\Filter\OnlineFilterable\OnlineFilterableListener</parameter>
+
         <parameter key="dcs_doctrine_extensions.listener.blameable.class">DCS\DoctrineExtensionsBundle\Listener\BlameableEventListener</parameter>
         <parameter key="dcs_doctrine_extensions.listener.ip_traceable.class">DCS\DoctrineExtensionsBundle\Listener\IpTraceableEventListener</parameter>
         <parameter key="dcs_doctrine_extensions.listener.loggable.class">DCS\DoctrineExtensionsBundle\Listener\LoggableEventListener</parameter>
@@ -12,6 +14,13 @@
     </parameters>
 
     <services>
+        <service id="dcs_doctrine_extensions.filter.online_filterable" class="%dcs_doctrine_extensions.filter.online_filterable.class%" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+
         <service id="gedmo.listener.blameable" class="Gedmo\Blameable\BlameableListener" public="false">
             <tag name="doctrine.event_subscriber" />
             <call method="setAnnotationReader">
