@@ -1,6 +1,6 @@
 <?php
 
-namespace DCS\DoctrineExtensionsBundle\Filter\OnlineFilterable\Mapping;
+namespace DCS\DoctrineExtensionsBundle\Filter\DateFilterable\Mapping;
 
 use Gedmo\Exception\InvalidMappingException;
 use Doctrine\ORM\Mapping\ClassMetadata;

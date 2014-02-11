@@ -1,14 +1,14 @@
 <?php
 
-namespace DCS\DoctrineExtensionsBundle\Filter\OnlineFilterable;
+namespace DCS\DoctrineExtensionsBundle\Filter\DateFilterable;
 
 use Gedmo\Mapping\MappedEventSubscriber;
 use Doctrine\Common\EventArgs;
 
 /**
- * OnlineFilterable listener
+ * DateFilterable listener
  */
-class OnlineFilterableListener extends MappedEventSubscriber
+class DateFilterableListener extends MappedEventSubscriber
 {
     /**
      * {@inheritdoc}
