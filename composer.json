@@ -17,7 +17,7 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/symfony": "2.3.*",
-        "gedmo/doctrine-extensions": "v2.3.9"
+        "gedmo/doctrine-extensions": "dev-master"
     },
     "autoload": {
         "psr-0": { "DCS\\DoctrineExtensionsBundle": "" }
