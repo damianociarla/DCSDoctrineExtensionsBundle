@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="dcs_doctrine_extensions.listener.blameable.class">DCS\DoctrineExtensionsBundle\Listener\BlameableEventListener</parameter>
+    </parameters>
+
+    <services>
+        <service id="gedmo.listener.blameable" class="%dcs_doctrine_extensions.blameable.class%" public="false">
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+            <tag name="doctrine.event_subscriber" />
+        </service>
+
+        <service id="dcs_doctrine_extensions.listener.blameable" class="%dcs_doctrine_extensions.listener.blameable.class%">
+            <argument type="service" id="gedmo.listener.blameable" />
+            <argument type="service" id="service_container" on-invalid="null" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+    </services>
+</container>

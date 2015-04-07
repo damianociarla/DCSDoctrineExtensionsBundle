@@ -17,15 +17,20 @@ class DCSDoctrineExtensionsExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        // Translatable
-        $container->setParameter('dcs_doctrine_extensions.translatable.translation_fallback', $config['translatable']['translation_fallback']);
-        $container->setParameter('dcs_doctrine_extensions.translatable.persist_default_locale_translation', $config['translatable']['persist_default_locale_translation']);
-        $container->setParameter('dcs_doctrine_extensions.translatable.skip_on_load', $config['translatable']['skip_on_load']);
-
-        // Uploadable
-        $container->setParameter('dcs_doctrine_extensions.uploadable.default_path', $config['uploadable']['default_path']);
-
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('listener.xml');
+        $configurations = array_keys(Configuration::$classes);
+
+
+        foreach ($configurations as $configurationName) {
+            $configuration = $config[$configurationName];
+
+            if ($configuration['enabled']) {
+                foreach ($configuration as $key => $value) {
+                    if ($key == 'enabled') continue;
+                    $container->setParameter('dcs_doctrine_extensions.'.$configurationName.'.'.$key, $value);
+                }
+                $loader->load(sprintf('listener/%s.xml', $configurationName));
+            }
+        }
     }
 }

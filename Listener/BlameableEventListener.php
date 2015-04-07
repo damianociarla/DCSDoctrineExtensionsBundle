@@ -2,36 +2,38 @@
 
 namespace DCS\DoctrineExtensionsBundle\Listener;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Gedmo\Blameable\BlameableListener;
 
 class BlameableEventListener
 {
-    /**
-    * @var \Symfony\Component\Security\Core\SecurityContextInterface
-    */
-    private $securityContext;
-
-    /**
-    * @var \Gedmo\Blameable\BlameableListener
-    */
     private $blameableListener;
+    private $container;
 
-    public function __construct(BlameableListener $blameableListener, SecurityContextInterface $securityContext = null)
+    public function __construct(BlameableListener $blameableListener, ContainerInterface $container = null)
     {
         $this->blameableListener = $blameableListener;
-        $this->securityContext = $securityContext;
+        $this->container = $container;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (null === $this->securityContext) {
+        if (null === $this->container) {
             return;
         }
 
-        $token = $this->securityContext->getToken();
-        if (null !== $token && $this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if ($this->container->has('security.token_storage')) {
+            // Symfony >= 2.6
+            $token = $this->container->get('security.token_storage')->getToken();
+            $checker = $this->get('security.authorization_checker');
+        } else {
+            // Symfony < 2.6
+            $checker = $this->get('security.context');
+            $token = $checker->getToken();
+        }
+
+        if (null !== $token && $checker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $this->blameableListener->setUserValue($token->getUser());
         }
     }

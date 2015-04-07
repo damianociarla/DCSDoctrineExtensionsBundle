@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="dcs_doctrine_extensions.listener.translatable.class">DCS\DoctrineExtensionsBundle\Listener\TranslatableEventListener</parameter>
+    </parameters>
+
+    <services>
+        <service id="gedmo.listener.translatable" class="%dcs_doctrine_extensions.translatable.class%" public="false">
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+            <call method="setDefaultLocale">
+                <argument>%dcs_doctrine_extensions.translatable.default_locale%</argument>
+            </call>
+            <call method="setTranslatableLocale">
+                <argument>%dcs_doctrine_extensions.translatable.default_locale%</argument>
+            </call>
+            <call method="setTranslationFallback">
+                <argument>%dcs_doctrine_extensions.translatable.translation_fallback%</argument>
+            </call>
+            <call method="setPersistDefaultLocaleTranslation">
+                <argument>%dcs_doctrine_extensions.translatable.persist_default_locale_translation%</argument>
+            </call>
+            <call method="setSkipOnLoad">
+                <argument>%dcs_doctrine_extensions.translatable.skip_on_load%</argument>
+            </call>
+            <tag name="doctrine.event_subscriber" priority="-10" />
+        </service>
+
+        <service id="dcs_doctrine_extensions.listener.translatable" class="%dcs_doctrine_extensions.listener.translatable.class%">
+            <argument type="service" id="gedmo.listener.translatable" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+    </services>
+</container>

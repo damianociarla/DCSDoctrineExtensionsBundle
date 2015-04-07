@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="dcs_doctrine_extensions.manager.uploadable.class">DCS\DoctrineExtensionsBundle\Manager\Uploadable\UploadableManager</parameter>
+    </parameters>
+
+    <services>
+        <service id="dcs_doctrine_extensions.uploadable.mime_type_guesser" class="%dcs_doctrine_extensions.uploadable.mime_type_guesser_class%" />
+
+        <service id="gedmo.listener.uploadable" class="%dcs_doctrine_extensions.uploadable.class%" public="false">
+            <argument type="service" id="dcs_doctrine_extensions.uploadable.mime_type_guesser" />
+            <call method="setAnnotationReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+            <call method="setDefaultPath">
+                <argument>%dcs_doctrine_extensions.uploadable.default_path%</argument>
+            </call>
+            <call method="setDefaultPath">
+                <argument>%dcs_doctrine_extensions.uploadable.default_path%</argument>
+            </call>
+            <tag name="doctrine.event_subscriber" />
+        </service>
+
+        <service id="dcs_doctrine_extensions.manager.uploadable" class="%dcs_doctrine_extensions.manager.uploadable.class%">
+            <argument type="service" id="gedmo.listener.uploadable" />
+        </service>
+    </services>
+</container>

@@ -7,9 +7,6 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class TranslatableEventListener
 {
-    /**
-     * @var \Gedmo\Translatable\TranslatableListener
-     */
     private $translatableListener;
 
     public function __construct(TranslatableListener $translatableListener)
