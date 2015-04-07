@@ -26,10 +26,10 @@ class LoggableEventListener
         if ($this->container->has('security.token_storage')) {
             // Symfony >= 2.6
             $token = $this->container->get('security.token_storage')->getToken();
-            $checker = $this->get('security.authorization_checker');
+            $checker = $this->container->get('security.authorization_checker');
         } else {
             // Symfony < 2.6
-            $checker = $this->get('security.context');
+            $checker = $this->container->get('security.context');
             $token = $checker->getToken();
         }
 
