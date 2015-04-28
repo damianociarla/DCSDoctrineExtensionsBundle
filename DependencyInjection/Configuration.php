@@ -80,7 +80,7 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                     ->defaultValue(self::$classes['translatable'])
                 ->end()
-                ->booleanNode('default_locale')
+                ->scalarNode('default_locale')
                     ->cannotBeEmpty()
                 ->end()
                 ->booleanNode('translation_fallback')
