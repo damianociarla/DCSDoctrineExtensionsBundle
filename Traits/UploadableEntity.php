@@ -45,7 +45,7 @@ trait UploadableEntity
      * Set path
      *
      * @param mixed $path
-     * @return Uploadable
+     * @return UploadableEntity
      */
     public function setPath($path)
     {
@@ -67,7 +67,7 @@ trait UploadableEntity
      * Set name
      *
      * @param mixed $name
-     * @return Uploadable
+     * @return UploadableEntity
      */
     public function setName($name)
     {
@@ -89,7 +89,7 @@ trait UploadableEntity
      * Set mimeType
      *
      * @param string $mimeType
-     * @return Uploadable
+     * @return UploadableEntity
      */
     public function setMimeType($mimeType)
     {
@@ -111,7 +111,7 @@ trait UploadableEntity
      * Set size
      *
      * @param string $size
-     * @return Uploadable
+     * @return UploadableEntity
      */
     public function setSize($size)
     {
