@@ -19,10 +19,10 @@ class LoggableEventListener
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (null === $this->securityContext) {
+        if (null === $this->container) {
             return;
         }
-
+        
         if ($this->container->has('security.token_storage')) {
             // Symfony >= 2.6
             $token = $this->container->get('security.token_storage')->getToken();
